@@ -27,13 +27,18 @@ Calculator.prototype.addToHistory = function (val1, val2, result, action) {
 	}
 };
 
-Calculator.prototype.add = function (num1, num2) {
+Calculator.prototype.operation = function (num1, num2, action) {
 	const val1 = parseFloat(num1.replace(',', '.'));
 	const val2 = parseFloat(num2.replace(',', '.'));
 	let result;
+
 	if (this.isCorrectNumber(val1) && this.isCorrectNumber(val2)) {
-		result = val1 + val2;
-		this.addToHistory(val1, val2, result, '+');
+		switch (action) {
+			case '+':
+				result = val1 + val2;
+				this.addToHistory(val1, val2, result, action);
+				break;
+		}
 	} else {
 		return null;
 	}
@@ -56,7 +61,7 @@ do {
 		number2 = prompt('Podaj liczbę nr 2');
 
 		if (action === '+') {
-			calc.add(number1, number2);
+			calc.operation(number1, number2, action);
 		}
 	}
 } while (calc.isCorrectAction(action));
