@@ -11,20 +11,29 @@ Calculator.prototype.getHistoryAsString = function () {
 	return this.history.join('\n');
 };
 
+Calculator.prototype.isCorrectNumber = function (num) {
+	if (num !== null && num !== undefined && !isNaN(num)) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+Calculator.prototype.addToHistory = function (val1, val2, result, action) {
+	switch (action) {
+		case '+':
+			this.history.push(`${val1} + ${val2} = ${result}`);
+			break;
+	}
+};
+
 Calculator.prototype.add = function (num1, num2) {
 	const val1 = parseFloat(num1.replace(',', '.'));
 	const val2 = parseFloat(num2.replace(',', '.'));
 	let result;
-	if (
-		val1 !== null &&
-		val1 !== undefined &&
-		!isNaN(val1) &&
-		val2 !== null &&
-		!isNaN(val2) &&
-		val2 !== NaN
-	) {
+	if (this.isCorrectNumber(val1) && this.isCorrectNumber(val2)) {
 		result = val1 + val2;
-		this.history.push(`${val1} + ${val2} = ${result}`);
+		this.addToHistory(val1, val2, result, '+');
 	} else {
 		return null;
 	}
