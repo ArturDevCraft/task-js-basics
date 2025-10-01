@@ -24,6 +24,18 @@ Calculator.prototype.addToHistory = function (val1, val2, result, action) {
 		case '+':
 			this.history.push(`${val1} + ${val2} = ${result}`);
 			break;
+		case '-':
+			this.history.push(`${val1} - ${val2} = ${result}`);
+			break;
+		case '*':
+			this.history.push(`${val1} * ${val2} = ${result}`);
+			break;
+		case '/':
+			this.history.push(`${val1} / ${val2} = ${result}`);
+			break;
+		case '^':
+			this.history.push(`${val1} ^ ${val2} = ${result}`);
+			break;
 	}
 };
 
@@ -36,9 +48,39 @@ Calculator.prototype.operation = function (num1, num2, action) {
 		switch (action) {
 			case '+':
 				result = val1 + val2;
-				this.addToHistory(val1, val2, result, action);
+				break;
+			case '-':
+				result = val1 - val2;
+				break;
+			case '*':
+				result = val1 * val2;
+				break;
+			case '/':
+				result = val1 / val2;
+				break;
+			case '^':
+				let i = 1;
+				result = val1;
+
+				if (val2 === 0) {
+					result = 1;
+				} else if (val2 < 0) {
+					i = -1;
+					while (i > val2) {
+						result *= val1;
+						i--;
+					}
+					result = 1 / result;
+				} else {
+					while (i < val2) {
+						result *= val1;
+						i++;
+					}
+				}
 				break;
 		}
+
+		this.addToHistory(val1, val2, result, action);
 	} else {
 		return null;
 	}
@@ -60,8 +102,6 @@ do {
 		number1 = prompt('Podaj liczbę nr 1');
 		number2 = prompt('Podaj liczbę nr 2');
 
-		if (action === '+') {
-			calc.operation(number1, number2, action);
-		}
+		calc.operation(number1, number2, action);
 	}
 } while (calc.isCorrectAction(action));
