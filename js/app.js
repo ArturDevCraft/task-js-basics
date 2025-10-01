@@ -39,6 +39,29 @@ Calculator.prototype.addToHistory = function (val1, val2, result, action) {
 	}
 };
 
+Calculator.prototype.power = function (base, exponent) {
+	let i = 1;
+	result = base;
+
+	if (exponent === 0) {
+		result = 1;
+	} else if (exponent < 0) {
+		i = -1;
+		while (i > exponent) {
+			result *= base;
+			i--;
+		}
+		result = 1 / result;
+	} else {
+		while (i < exponent) {
+			result *= base;
+			i++;
+		}
+	}
+
+	return result;
+};
+
 Calculator.prototype.operation = function (num1, num2, action) {
 	const val1 = parseFloat(num1.replace(',', '.'));
 	const val2 = parseFloat(num2.replace(',', '.'));
@@ -59,24 +82,7 @@ Calculator.prototype.operation = function (num1, num2, action) {
 				result = val1 / val2;
 				break;
 			case '^':
-				let i = 1;
-				result = val1;
-
-				if (val2 === 0) {
-					result = 1;
-				} else if (val2 < 0) {
-					i = -1;
-					while (i > val2) {
-						result *= val1;
-						i--;
-					}
-					result = 1 / result;
-				} else {
-					while (i < val2) {
-						result *= val1;
-						i++;
-					}
-				}
+				result = this.power(val1, val2);
 				break;
 		}
 
