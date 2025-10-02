@@ -1,10 +1,16 @@
 function Calculator() {
-	this.actions = ['+', '-', '*', '/', '^'];
+	this.actions = {
+		'+': this.add,
+		'-': this.substract,
+		'*': this.multiply,
+		'/': this.divide,
+		'^': this.power,
+	};
 	this.history = [];
 }
 
 Calculator.prototype.isCorrectAction = function (action) {
-	return this.actions.includes(action);
+	return Object.keys(this.actions).includes(action);
 };
 
 Calculator.prototype.getHistoryAsString = function () {
@@ -20,23 +26,23 @@ Calculator.prototype.isCorrectNumber = function (num) {
 };
 
 Calculator.prototype.addToHistory = function (val1, val2, result, action) {
-	switch (action) {
-		case '+':
-			this.history.push(`${val1} + ${val2} = ${result}`);
-			break;
-		case '-':
-			this.history.push(`${val1} - ${val2} = ${result}`);
-			break;
-		case '*':
-			this.history.push(`${val1} * ${val2} = ${result}`);
-			break;
-		case '/':
-			this.history.push(`${val1} / ${val2} = ${result}`);
-			break;
-		case '^':
-			this.history.push(`${val1} ^ ${val2} = ${result}`);
-			break;
-	}
+	this.history.push(`${val1} ${action} ${val2} = ${result}`);
+};
+
+Calculator.prototype.add = function (val1, val2) {
+	return val1 + val2;
+};
+
+Calculator.prototype.substract = function (val1, val2) {
+	return val1 - val2;
+};
+
+Calculator.prototype.multiply = function (val1, val2) {
+	return val1 * val2;
+};
+
+Calculator.prototype.divide = function (val1, val2) {
+	return val1 / val2;
 };
 
 Calculator.prototype.power = function (base, exponent) {
@@ -68,25 +74,12 @@ Calculator.prototype.operation = function (num1, num2, action) {
 	let result;
 
 	if (this.isCorrectNumber(val1) && this.isCorrectNumber(val2)) {
-		switch (action) {
-			case '+':
-				result = val1 + val2;
-				break;
-			case '-':
-				result = val1 - val2;
-				break;
-			case '*':
-				result = val1 * val2;
-				break;
-			case '/':
-				result = val1 / val2;
-				break;
-			case '^':
-				result = this.power(val1, val2);
-				break;
-		}
+		const actionFunc = this.actions[action];
 
-		this.addToHistory(val1, val2, result, action);
+		if (typeof actionFunc === 'function') {
+			result = actionFunc(val1, val2);
+			this.addToHistory(val1, val2, result, action);
+		}
 	} else {
 		return null;
 	}
