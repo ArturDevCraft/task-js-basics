@@ -18,11 +18,10 @@ Calculator.prototype.getHistoryAsString = function () {
 };
 
 Calculator.prototype.isCorrectNumber = function (num) {
-	if (num !== null && num !== undefined && !isNaN(num)) {
+	if (typeof num === 'number' && num === num) {
 		return true;
-	} else {
-		return false;
 	}
+	return false;
 };
 
 Calculator.prototype.addToHistory = function (val1, val2, result, action) {
@@ -42,7 +41,10 @@ Calculator.prototype.multiply = function (val1, val2) {
 };
 
 Calculator.prototype.divide = function (val1, val2) {
-	return val1 / val2;
+	if (val2 !== 0) {
+		return val1 / val2;
+	}
+	return null;
 };
 
 Calculator.prototype.power = function (base, exponent) {
@@ -71,20 +73,18 @@ Calculator.prototype.power = function (base, exponent) {
 Calculator.prototype.operation = function (num1, num2, action) {
 	const val1 = parseFloat(num1.replace(',', '.'));
 	const val2 = parseFloat(num2.replace(',', '.'));
-	let result;
 
 	if (this.isCorrectNumber(val1) && this.isCorrectNumber(val2)) {
 		const actionFunc = this.actions[action];
 
 		if (typeof actionFunc === 'function') {
-			result = actionFunc(val1, val2);
+			const result = actionFunc(val1, val2);
 			this.addToHistory(val1, val2, result, action);
+			return result;
 		}
-	} else {
-		return null;
 	}
 
-	return result;
+	return null;
 };
 
 const calc = new Calculator();
